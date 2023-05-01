@@ -1,0 +1,39 @@
+class Solution {
+public:
+     
+    int solve(int i,int time,int n,vector<int>&sat,vector<vector<int>>&dp)
+    {
+        // base cases
+        if(i>=n) return 0;
+        
+        if(dp[i][time]!=-1) return dp[i][time];
+       
+       int pick=(sat[i]*time)+solve(i+1,time+1,n,sat,dp);
+
+    
+       int not_pick=solve(i+1,time,n,sat,dp);
+
+       return dp[i][time]=max(pick,not_pick);
+
+        
+    } 
+
+
+    int maxSatisfaction(vector<int>& sat) {
+        
+         int n=sat.size();
+
+        sort(sat.begin(),sat.end());
+         
+        int i=0;
+        
+        int time=1;
+
+       
+
+        vector<vector<int>>dp(n+1,vector<int>(n+1,-1));
+
+        return solve(i,time,n,sat,dp); 
+ 
+    }
+};
