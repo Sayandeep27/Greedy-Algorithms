@@ -1,5 +1,10 @@
- bool static cmp(pair<int,int>a,pair<int,int>b)
+class Solution
+{
+    public:
+    
+    bool static cmp(pair<int,int>&a,pair<int,int>&b)
     {
+        
         if(a.first==b.first) return a.second<=b.second;
         
         return a.first<b.first;
@@ -14,24 +19,30 @@
            v.push_back({end[i],start[i]});
        }
        
+       
        sort(v.begin(),v.end(),cmp);
        
        
        int cnt=1;
        
-       int lol=v[0].first;  // ending time of first meeting
+       int i=0,j=1;
        
-       
-       for(int i=1;i<n;i++)
+       while(j<n and i<n)
        {
-           if(v[i].second>lol)
+           if(v[j].second>v[i].first)
            {
                cnt++;
-               lol=v[i].first;
+               i=j;
+               j++;
            }
-           
-           
+           else
+           {
+               j++;
+           }
        }
        
+       
        return cnt;
+       
     }
+};
