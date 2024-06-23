@@ -1,4 +1,50 @@
- int findPlatform(int arr[], int dep[], int n)
+int findMinPlatforms(vector<int>& arrivals, vector<int>& departures) {
+    int n = arrivals.size();
+
+    if (n != departures.size()) 
+    {
+        throw invalid_argument("The sizes of arrivals and departures arrays must be the same.");
+    }
+
+    // Sort both arrival and departure times
+    sort(arrivals.begin(), arrivals.end());
+    sort(departures.begin(), departures.end());
+
+    int platformsNeeded = 0;
+    int maxPlatforms = 0;
+
+    int i = 0; // Pointer for arrivals
+    int j = 0; // Pointer for departures
+
+    // Traverse both arrays
+    while (i < n && j < n) 
+    {
+        // If current train arrives before or when the current platform is free
+        if (arrivals[i] <= departures[j])
+        {
+            platformsNeeded++; // Increment platforms needed for current arrival
+            i++; // Move to the next arrival time
+        } 
+        else 
+        {
+            platformsNeeded--; // Decrement platforms needed as a train has departed
+            j++; // Move to the next departure time
+        }
+
+
+
+        // Update maxPlatforms if needed
+        if (platformsNeeded > maxPlatforms) 
+        {
+            maxPlatforms = platformsNeeded;
+        }
+    }
+
+    return maxPlatforms;
+}
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+int findPlatform(int arr[], int dep[], int n)
     {
         sort(arr,arr+n);
         
