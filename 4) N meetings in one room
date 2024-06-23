@@ -1,48 +1,53 @@
-class Solution
-{
-    public:
-    
-    bool static cmp(pair<int,int>&a,pair<int,int>&b)
-    {
-        
-        if(a.first==b.first) return a.second<=b.second;
-        
-        return a.first<b.first;
-    }
-    
-    int maxMeetings(int start[], int end[], int n)
-    {
-       vector<pair<int,int>>v;
-       
-       for(int i=0;i<n;i++)
-       {
-           v.push_back({end[i],start[i]});
-       }
-       
-       
-       sort(v.begin(),v.end(),cmp);
-       
-       
-       int cnt=1;
-       
-       int i=0,j=1;
-       
-       while(j<n and i<n)
-       {
-           if(v[j].second>v[i].first)
-           {
-               cnt++;
-               i=j;
-               j++;
-           }
-           else
-           {
-               j++;
-           }
-       }
-       
-       
-       return cnt;
-       
-    }
+// Structure to represent a meeting
+struct Meeting {
+    int start;
+    int end;
+    int index; // To track the original index of the meeting
 };
+
+
+
+// Comparator function for sorting meetings by end time
+bool compareMeetings(const Meeting& a, const Meeting& b) 
+{
+    return a.end < b.end;    // Sort by end time ascending
+}
+
+// Function to find the maximum number of meetings that can be scheduled
+void maxMeetings(vector<int>& start, vector<int>& end) 
+{
+    int n = start.size();
+    if (n == 0) return;    // Edge case: no meetings
+
+    vector<Meeting> meetings(n);
+
+    // Initialize the meetings vector with start and end times
+    for (int i = 0; i < n; ++i) 
+    {
+        meetings[i].start = start[i];
+        meetings[i].end = end[i];
+
+        meetings[i].index = i + 1;    // original index
+    }
+
+    // Sort meetings by end time using the custom comparator
+    sort(meetings.begin(), meetings.end(), compareMeetings);
+
+    // Selecting meetings
+    int last_end_time = meetings[0].end;    // End time of the first selected meeting
+
+    cout << "Selected meetings: " << meetings[0].index << " "; // Output the index of the first meeting
+
+    for (int i = 1; i < n; ++i) 
+    {
+        // If the current meeting can start after or exactly when the last selected meeting ends
+        if (meetings[i].start >= last_end_time) 
+        {
+            cout << meetings[i].index << " ";      // Output the index of the current meeting
+            last_end_time = meetings[i].end;       // Update the last end time to the end time of the current meeting
+        }
+    }
+
+
+    cout << endl; // Print newline after listing all selected meetings
+}
