@@ -3,6 +3,9 @@ public:
 
    bool static cmp(pair<int,int>&a,pair<int,int>&b)
    {
+       // Sort primarily by grow time (descending order)
+       // If grow times are equal, sort by plant time (ascending order)
+
        if(a.first==b.first) return a.second<b.second;
 
        return a.first>=b.first;
@@ -12,24 +15,31 @@ public:
          
          int n=plant.size();
          
-         vector<pair<int,int>>v;
+         vector<pair<int,int>>v;   // Create a vector of pairs (grow time, plant time)
 
          for(int i=0;i<n;i++) v.push_back({grow[i],plant[i]});
 
-         sort(v.begin(),v.end(),cmp);
+         sort(v.begin(),v.end(),cmp);    // Sort the vector of pairs using the custom comparator cmp
          
-         int sum=0;
-         int ans=0;
+         int sum=0;   // Variable to accumulate plant times
+         int ans=0;   // Variable to store the earliest possible full bloom day
 
+
+         // Iterate through the sorted vector of pairs
          for(int i=0;i<n;i++)
          {
-             sum+=v[i].second;
+             sum+=v[i].second;   // Accumulate plant times
 
+
+            // Calculate the earliest possible full bloom day
+            // sum + v[i].first represents the day when the i-th flower blooms
+            // ans keeps track of the maximum of all these days
+      
              if(sum+v[i].first>ans) ans=sum+v[i].first;
          }
 
 
-         return ans;
+         return ans;    // Return the earliest possible full bloom day
 
     }
 };
