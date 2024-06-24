@@ -2,34 +2,48 @@ class Solution {
 public:
     vector<vector<int>> merge(vector<vector<int>>& intervals) {
         
-        // Check if intervals is empty
-        if (intervals.empty()) return {};
-        
-        // Sort intervals based on the start time
-        sort(intervals.begin(), intervals.end(), [](const vector<int>& a, const vector<int>& b) 
-        {
-            return a[0] < b[0];
-        });
-        
-        vector<vector<int>> result;
+       // insert interval problem er second part(newinterval ta add korar porer step theke same to same)
 
-        result.push_back(intervals[0]);   // Add the first interval
-        
-        // Iterate through the sorted intervals
-        for (int i = 1; i < intervals.size(); ++i) 
-        {
-            // If there is an overlap, merge intervals
-            if (intervals[i][0] <= result.back()[1]) 
-            {
-                result.back()[1] = max(result.back()[1], intervals[i][1]);
-            }
-            else 
-            {
-                // No overlap, add the interval to the result
-                result.push_back(intervals[i]);
-            }
-        }
-        
-        return result;
+
+       vector<vector<int>>ans;  // This will store the final merged intervals
+
+
+       int n=intervals.size();
+
+       // interval er start time er basis e sort korlam
+       sort(intervals.begin(),intervals.end()); 
+
+       int prev=0;  // Initialize the previous interval index to 0
+
+       ans.push_back(intervals[prev]);  // Add the first interval to the answer
+
+
+       // Loop through the intervals starting from the second one
+       for(int i=1;i<n;i++)
+       {
+         if(intervals[prev][1]>=intervals[i][0])   // jodi prev interval er end time, current interval er start time er soman ba beshi hoy
+         {
+             if(intervals[prev][1]<=intervals[i][1])  // jodi current interval er end time, previous interval er end time er cheyeo beshi
+             {
+                ans.pop_back();   // Remove the last added interval from the answer
+
+                intervals[prev][1]=intervals[i][1];  // prev interval er end time ke current interval er end time diye dilam (karon current interval er end time prev interval er cheye beshi)
+
+                ans.push_back(intervals[prev]);  // add the merged interval to the answer
+             }
+
+         }
+         else
+         {
+             ans.push_back(intervals[i]);  // If there is no overlap, add the current interval to the answer
+
+             prev=i;   // Update the previous interval index to the current interval
+         
+         }
+
+
+       }
+
+      return ans;  // Return the final list of merged intervals
     }
 };
