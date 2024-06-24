@@ -1,40 +1,45 @@
 class Solution {
 public:
     vector<vector<int>> insert(vector<vector<int>>& intervals, vector<int>& newInterval) {
-         
-        vector<vector<int>> result;
+          
+        vector<vector<int>>ans;  // This will store the final merged intervals
 
-        int n = intervals.size();
+        intervals.push_back(newInterval);  // Add the new interval to the list of intervals
 
-        int i = 0;
+        sort(intervals.begin(),intervals.end());  // Sort the intervals based on their start times
 
-        // Insert all intervals before the new interval
-        while (i < n && intervals[i][1] < newInterval[0]) 
+        int n=intervals.size();  // Get the new size of the intervals list
+
+        int prev=0;  // Initialize the previous interval index to 0
+
+        ans.push_back(intervals[prev]);  // Add the first interval to the answer
+
+
+        // Loop through the intervals starting from the second one
+        for(int i=1;i<n;i++)
         {
-            result.push_back(intervals[i]);
-            i++;
+            if(intervals[prev][1]>=intervals[i][0])  // jodi prev interval er end time, current interval er start time er soman ba beshi hoy
+            {
+                if(intervals[prev][1]<intervals[i][1])  // jodi current interval er end time, previous interval er end time er cheyeo beshi
+                {
+                    ans.pop_back();  // Remove the last added interval from the answer
+
+                    intervals[prev][1]=intervals[i][1];  // prev interval er end time ke current interval er end time diye dilam (karon current interval er end time prev interval er cheye beshi)
+
+                    ans.push_back(intervals[prev]);  // add the merged interval to the answer
+                }
+            }
+            else
+            {
+                // If there is no overlap, add the current interval to the answer
+                ans.push_back(intervals[i]);
+
+                prev=i;  // Update the previous interval index to the current interval
+            }
         }
 
-        // Merge intervals that overlap with the new interval
-        while (i < n && intervals[i][0] <= newInterval[1]) 
-        {
-            newInterval[0] = min(newInterval[0], intervals[i][0]);
-            newInterval[1] = max(newInterval[1], intervals[i][1]);
-            i++;
-        }
 
-        // Insert the merged new interval
-        result.push_back(newInterval);
-
-        // Insert all remaining intervals
-        while (i < n) 
-        {
-            result.push_back(intervals[i]);
-            i++;
-        }
-
-        return result;
-
+       return ans;  // Return the final list of merged intervals
 
     }
 };
