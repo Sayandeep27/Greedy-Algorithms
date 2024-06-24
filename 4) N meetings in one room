@@ -1,53 +1,37 @@
-// Structure to represent a meeting
-struct Meeting {
-    int start;
-    int end;
-    int index; // To track the original index of the meeting
-};
-
-
-
-// Comparator function for sorting meetings by end time
-bool compareMeetings(const Meeting& a, const Meeting& b) 
-{
-    return a.end < b.end;    // Sort by end time ascending
-}
-
-// Function to find the maximum number of meetings that can be scheduled
-void maxMeetings(vector<int>& start, vector<int>& end) 
-{
-    int n = start.size();
-    if (n == 0) return;    // Edge case: no meetings
-
-    vector<Meeting> meetings(n);
-
-    // Initialize the meetings vector with start and end times
-    for (int i = 0; i < n; ++i) 
+int maxMeetings(int start[], int end[], int n)
     {
-        meetings[i].start = start[i];
-        meetings[i].end = end[i];
+        // Initialize the count of meetings that can be attended to 1
+        // We can always attend at least the first meeting
+        int cnt = 1;
 
-        meetings[i].index = i + 1;    // original index
-    }
+        // Vector to store meetings as pairs of (end time, start time)
+        vector<pair<int, int>> meetings;
 
-    // Sort meetings by end time using the custom comparator
-    sort(meetings.begin(), meetings.end(), compareMeetings);
-
-    // Selecting meetings
-    int last_end_time = meetings[0].end;    // End time of the first selected meeting
-
-    cout << "Selected meetings: " << meetings[0].index << " "; // Output the index of the first meeting
-
-    for (int i = 1; i < n; ++i) 
-    {
-        // If the current meeting can start after or exactly when the last selected meeting ends
-        if (meetings[i].start >= last_end_time) 
+        // Populate the vector with the meetings
+        for (int i = 0; i < n; i++) 
         {
-            cout << meetings[i].index << " ";      // Output the index of the current meeting
-            last_end_time = meetings[i].end;       // Update the last end time to the end time of the current meeting
+            meetings.push_back({end[i], start[i]});
         }
+
+        // Sort the meetings based on end time
+        sort(meetings.begin(), meetings.end());
+
+        // Track the end time of the last attended meeting
+        int last_end_time = meetings[0].first;
+
+        // Iterate through the remaining meetings
+        for (int i = 1; i < n; i++) 
+        {
+            // If the start time of the current meeting is after the end time
+            // of the last attended meeting, we can attend this meeting
+            if (meetings[i].second > last_end_time) 
+            {
+                cnt++;  // Increment the count of meetings attended
+                
+                last_end_time = meetings[i].first;  // Update the end time to the current meeting's end time
+            }
+        }
+
+        // Return the maximum number of meetings that can be attended
+        return cnt;
     }
-
-
-    cout << endl; // Print newline after listing all selected meetings
-}
