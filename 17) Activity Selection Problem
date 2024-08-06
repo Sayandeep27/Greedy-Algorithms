@@ -1,0 +1,35 @@
+ bool static cmp(pair<int,int>&a,pair<int,int>&b)
+    {
+        return a.second<b.second;
+    }
+    
+    int activitySelection(vector<int> start, vector<int> end, int n)
+    {
+        vector<pair<int,int>>activity;
+        
+        for(int i=0;i<n;i++)
+        {
+            activity.push_back({start[i],end[i]});
+        }
+        
+        sort(activity.begin(),activity.end(),cmp);
+        
+        vector<pair<int,int>>selectedactivity;
+        
+        int lastendtime=-1;
+        
+        for(auto it:activity)
+        {
+            if(it.first>lastendtime)
+            {
+                selectedactivity.push_back({it.first,it.second});
+                
+                lastendtime=it.second;
+            }
+        }
+        
+        
+        return selectedactivity.size();
+        
+        
+    }
