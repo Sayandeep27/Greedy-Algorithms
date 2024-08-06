@@ -1,0 +1,55 @@
+int numberOfGasStationsRequired(double dist, const vector<int>& stations) {
+    int cnt = 0;
+    int n = stations.size();
+    
+    for (int i = 1; i < n; ++i) 
+    {
+        int numberInBetween = static_cast<int>((stations[i] - stations[i - 1]) / dist);
+       
+        if ((stations[i] - stations[i - 1]) == numberInBetween * dist) 
+        {
+            numberInBetween--;
+        }
+        
+        cnt += numberInBetween;
+    }
+    
+    
+    return cnt;
+}
+
+  
+  
+double findSmallestMaxDist(vector<int> &stations, int k) {
+        
+    int n = stations.size();
+    double low = 0;
+    double high = 0;
+
+    for (int i = 0; i < n - 1; ++i) 
+    {
+        high = max(high, static_cast<double>(stations[i + 1] - stations[i]));
+    }
+
+    double diff = 1e-6;
+    
+    while (high - low > diff) 
+    {
+        double mid = (low + high) / 2.0;
+        
+        int cnt = numberOfGasStationsRequired(mid, stations);
+        
+        if (cnt > k) 
+        {
+            low = mid;
+        } 
+        else 
+        {
+            high = mid;
+        }
+    }
+    
+    
+    return high;
+    
+    }
