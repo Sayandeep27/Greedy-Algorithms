@@ -1,0 +1,56 @@
+class Solution {
+public:
+    int minimumCostOfBreaking(vector<int>x, vector<int> y, int m, int n){
+        //Write your code here
+        
+    // Sort the cutting costs in descending order
+    vector<int> xSorted = x;
+    vector<int> ySorted = y;
+    
+    sort(xSorted.begin(), xSorted.end(), greater<int>());
+    sort(ySorted.begin(), ySorted.end(), greater<int>());
+
+    // Initialize pointers and cost variables
+    int i = 0, j = 0;  // Pointers for xSorted and ySorted
+    int verticalCuts = 1;   // Initially only one vertical piece
+    int horizontalCuts = 1; // Initially only one horizontal piece
+    int cost = 0;
+
+    // While there are still cuts to process
+    while (i < xSorted.size() && j < ySorted.size()) 
+    {
+        if (xSorted[i] > ySorted[j]) 
+        {
+            // Apply a vertical cut
+            cost += xSorted[i] * horizontalCuts;
+            verticalCuts++;
+            i++;
+        } 
+        else 
+        {
+            // Apply a horizontal cut
+            cost += ySorted[j] * verticalCuts;
+            horizontalCuts++;
+            j++;
+        }
+    }
+
+
+
+    // Process remaining cuts if any
+    while (i < xSorted.size()) {
+        cost += xSorted[i] * horizontalCuts;
+        i++;
+    }
+    
+    
+    while (j < ySorted.size()) {
+        cost += ySorted[j] * verticalCuts;
+        j++;
+    }
+
+    return cost;
+        
+        
+    }
+};
