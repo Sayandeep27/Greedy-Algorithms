@@ -1,0 +1,43 @@
+class Solution {
+public:
+    vector<int> partitionLabels(string s) {
+        
+        
+        unordered_map<char,int>lpos;
+        
+        for(int i=0;i<s.size();i++)
+        {
+            
+            lpos[s[i]]=i;
+            
+        }
+        
+        vector<int>ans;
+        
+        int si=0;    // starting index of that part
+        
+        int maxi=0;
+        
+        for(int i=0;i<s.size();i++)
+        {
+            
+            maxi=max(maxi,lpos[s[i]]);
+            
+            if(maxi==i)
+            {
+                ans.push_back(i+1-si);
+                si=i+1;
+            }
+            
+            
+        }
+        
+        
+        return ans;
+        
+        
+        
+        
+        
+    }
+};
