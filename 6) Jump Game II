@@ -1,67 +1,27 @@
-int jump(vector<int>& nums) {
-    int n = nums.size();
-
-    if (n == 1) return 0; // If there is only one element, no jump needed
-
-    int jumps = 0;
-
-    int currentEnd = 0; // Farthest index that can be reached with the current number of jumps
-    int farthest = 0;   // Farthest index that can be reached by making jumps+1 jumps
-
-    for (int i = 0; i < n - 1; ++i) 
-    {
-        farthest = max(farthest, i + nums[i]);
-
-        if (i == currentEnd) 
-        {
-            jumps++;
-            currentEnd = farthest;
-
-            if (currentEnd >= n - 1) break;     // If we can reach or exceed the last index, no need for further jumps
-        }
-    }
-
-    return jumps;
-}
-
-
---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 class Solution {
 public:
-
-   int solve(int i,int n,vector<int>&nums,vector<int>&dp)
-   {
-       // base cases
-       if(i==n-1) return 0;
-       if(i>=n) return 1e9;
-
-       if(dp[i]!=-1) return dp[i];
-
-      int x=nums[i];
-
-      int steps=1e9;
-
-      for(int k=1;k<=x;k++)
-      {
-          steps=min(steps,solve(i+k,n,nums,dp));
-      }
-
-      return dp[i]= steps+1;
-     
-
-   }
-
-
     int jump(vector<int>& nums) {
         
         int n=nums.size();
 
-        vector<int>dp(n,-1);
+        int jumps=0;
+        int left=0,right=0;
 
-        int i=0;
+        while(right<n-1)
+        {
+            int maxreach=0;
+
+            for(int i=left;i<=right;i++)
+            {
+               maxreach=max(maxreach,i+nums[i]);
+            }
+
+            left=right+1;
+            right=maxreach;
+            jumps++;
+        }
 
 
-        return solve(i,n,nums,dp);
-        
+        return jumps;
     }
 };
